@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import React from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
 const styles = {};
 
@@ -35,17 +36,37 @@ styles.panel = {
 };
 
 class Tabs extends React.Component {
+  static propTypes = {
+    data: PropTypes.array
+  };
+
+  state = {
+    activeIndex: 0
+  };
+
+  handleClickSetActive(tabIndex) {
+    this.setState({
+      activeIndex: tabIndex
+    })
+  }
+
   render() {
+    const data = this.props.data;
+
     return (
       <div className="Tabs">
-        <div className="Tab" style={styles.activeTab}>
-          Active
-        </div>
-        <div className="Tab" style={styles.tab}>
-          Inactive
-        </div>
+        {
+          data.map((tab, index) => (
+            <div className="Tab"
+                 key={tab.id}
+                 style={this.state.activeIndex === index ? styles.activeTab : styles.tab}
+                 onClick={() => this.handleClickSetActive(index)}>
+              {tab.name}
+            </div>
+          ))
+        }
         <div className="TabPanel" style={styles.panel}>
-          Panel
+          {data[this.state.activeIndex].description}
         </div>
       </div>
     );
@@ -57,7 +78,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Countries</h1>
-        <Tabs data={this.props.countries} />
+        <Tabs data={this.props.countries}/>
       </div>
     );
   }
@@ -74,13 +95,13 @@ const DATA = [
     name: "Brazil",
     description: "Sunshine, beaches, and Carnival"
   },
-  { id: 3, name: "Russia", description: "World Cup 2018!" }
+  {id: 3, name: "Russia", description: "World Cup 2018!"}
 ];
 
 ReactDOM.render(
-  <App countries={DATA} />,
+  <App countries={DATA}/>,
   document.getElementById("app"),
-  function() {
+  function () {
     require("./tests").run(this);
   }
 );
