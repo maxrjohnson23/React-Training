@@ -21,6 +21,15 @@ import ReactDOM from "react-dom";
 import serializeForm from "form-serialize";
 
 class CheckoutForm extends React.Component {
+  state = {
+    billingName: "",
+    billingState: "",
+    shippingName: "",
+    shippingState: "",
+    shippingSameAsBilling: false
+  }
+
+
   render() {
     return (
       <div>
@@ -30,31 +39,39 @@ class CheckoutForm extends React.Component {
             <legend>Billing Address</legend>
             <p>
               <label>
-                Billing Name: <input type="text" />
+                Billing Name: <input type="text" value={this.state.billingName}
+                                     onChange={(e) => this.setState({billingName: e.target.value})}/>
               </label>
             </p>
             <p>
               <label>
-                Billing State: <input type="text" size="2" />
+                Billing State: <input type="text" size="2"
+                                      value={this.state.billingState}
+                                      onChange={(e) => this.setState({billingState: e.target.value})}/>
               </label>
             </p>
           </fieldset>
 
-          <br />
+          <br/>
 
           <fieldset>
             <label>
-              <input type="checkbox" /> Same as billing
+              <input type="checkbox" checked={this.state.shippingSameAsBilling}
+                     onChange={(e) => this.setState({shippingSameAsBilling: e.target.checked})}/> Same as billing
             </label>
             <legend>Shipping Address</legend>
             <p>
               <label>
-                Shipping Name: <input type="text" />
+                Shipping Name: <input type="text"
+                                      value={this.state.shippingSameAsBilling ? this.state.billingName : this.state.shippingName}
+                                      onChange={(e) => this.setState({shippingName: e.target.value})}/>
               </label>
             </p>
             <p>
               <label>
-                Shipping State: <input type="text" size="2" />
+                Shipping State: <input type="text" size="2"
+                                       value={this.state.shippingSameAsBilling ? this.state.billingState : this.state.shippingState}
+                                       onChange={(e) => this.setState({shippingState: e.target.value})}/>
               </label>
             </p>
           </fieldset>
@@ -68,4 +85,4 @@ class CheckoutForm extends React.Component {
   }
 }
 
-ReactDOM.render(<CheckoutForm />, document.getElementById("app"));
+ReactDOM.render(<CheckoutForm/>, document.getElementById("app"));
