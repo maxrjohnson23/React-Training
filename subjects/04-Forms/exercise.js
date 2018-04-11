@@ -29,6 +29,20 @@ class CheckoutForm extends React.Component {
     shippingSameAsBilling: false
   }
 
+  componentDidMount() {
+    window.addEventListener('beforeunload', () => {
+      localStorage.formState = JSON.stringify(this.state);
+    })
+  }
+
+  componentWillMount() {
+    const formState = localStorage.formState;
+
+    if(formState) {
+      this.setState(JSON.parse(formState));
+    }
+  }
+
 
   render() {
     return (
